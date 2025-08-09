@@ -1,0 +1,341 @@
+/* contact.css - Contact Section Styles */
+
+.contact-section {
+    padding: var(--section-padding);
+    position: relative;
+}
+
+/* Symmetrical Grid Layout */
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+    margin-top: 60px;
+}
+
+/* Contact Info Cards - Top Row */
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.info-card {
+    padding: 30px;
+    text-align: center;
+    transition: var(--transition-smooth);
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, rgba(247, 213, 79, 0.08), rgba(247, 213, 79, 0.02));
+}
+
+.info-card i {
+    font-size: 30px;
+    color: var(--mustard);
+    margin-bottom: 15px;
+}
+
+.info-card h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--alabaster);
+}
+
+.info-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.8;
+}
+
+/* Contact Form - Full Width Below */
+.contact-form-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.contact-form {
+    padding: 40px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 15px 20px;
+    padding-left: 45px;
+    background: rgba(235, 235, 223, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    color: var(--alabaster);
+    font-size: 16px;
+    transition: var(--transition-smooth);
+    font-family: var(--font-primary);
+}
+
+/* Fix for select placeholder */
+.form-group select {
+    color: var(--alabaster);
+}
+
+.form-group select option[value=""] {
+    color: rgba(235, 235, 223, 0.5);
+}
+
+.form-group select:invalid {
+    color: rgba(235, 235, 223, 0.5);
+}
+
+.form-group select:valid {
+    color: var(--alabaster);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--mustard);
+    background: rgba(247, 213, 79, 0.05);
+}
+
+.form-group label {
+    position: absolute;
+    left: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(235, 235, 223, 0.5);
+    font-size: 16px;
+    pointer-events: none;
+    transition: var(--transition-smooth);
+    background: transparent;
+}
+
+/* Special handling for select label */
+.form-group select ~ label {
+    display: none; /* Hide label for select since it has options */
+}
+
+.form-group textarea ~ label {
+    top: 20px;
+    transform: translateY(0);
+}
+
+.form-group input:focus ~ label,
+.form-group input:not(:placeholder-shown) ~ label,
+.form-group textarea:focus ~ label,
+.form-group textarea:not(:placeholder-shown) ~ label {
+    top: -10px;
+    left: 20px;
+    font-size: 12px;
+    color: var(--mustard);
+    background: var(--black);
+    padding: 0 10px;
+}
+
+.form-group i {
+    position: absolute;
+    left: 15px;
+    top: 18px;
+    color: rgba(235, 235, 223, 0.3);
+    transition: var(--transition-smooth);
+}
+
+.form-group textarea ~ i {
+    top: 20px;
+}
+
+.form-group input:focus ~ i,
+.form-group select:focus ~ i,
+.form-group textarea:focus ~ i {
+    color: var(--mustard);
+}
+
+.form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23EBEBDF'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+}
+
+.form-group select option {
+    background: var(--black);
+    color: var(--alabaster);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 18px 40px;
+    font-size: 16px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(247, 213, 79, 0.1), rgba(247, 213, 79, 0.05));
+    border: 2px solid var(--mustard);
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, rgba(247, 213, 79, 0.2), rgba(247, 213, 79, 0.1));
+    box-shadow: 0 10px 40px rgba(247, 213, 79, 0.3);
+}
+
+/* Social Links - Centered at bottom */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.social-link {
+    width: 45px;
+    height: 45px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--alabaster);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.social-link:hover {
+    background: linear-gradient(135deg, rgba(247, 213, 79, 0.2), rgba(247, 213, 79, 0.1));
+    border-color: var(--mustard);
+    transform: translateY(-5px);
+}
+
+.social-link:hover i {
+    color: var(--mustard);
+}
+
+/* Form Validation Styles */
+.form-group input:invalid:not(:focus):not(:placeholder-shown),
+.form-group select:invalid:not(:focus):not(:placeholder-shown),
+.form-group textarea:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: #ff6b6b;
+}
+
+.form-group input:valid:not(:focus):not(:placeholder-shown),
+.form-group select:valid:not(:focus):not(:placeholder-shown),
+.form-group textarea:valid:not(:focus):not(:placeholder-shown) {
+    border-color: #51cf66;
+}
+
+/* Success/Error Messages */
+.form-message {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    animation: slideInUp 0.3s ease;
+}
+
+.form-message.success {
+    background: rgba(81, 207, 102, 0.1);
+    border: 1px solid #51cf66;
+    color: #51cf66;
+}
+
+.form-message.error {
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .contact-info {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .contact-form {
+        padding: 30px 20px;
+    }
+
+    .info-card {
+        padding: 20px;
+    }
+}
+
+/* Success/Error Messages */
+.form-message {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    animation: slideInUp 0.3s ease;
+}
+
+.form-message.success {
+    background: rgba(81, 207, 102, 0.1);
+    border: 1px solid #51cf66;
+    color: #51cf66;
+}
+
+.form-message.error {
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .contact-form {
+        padding: 30px 20px;
+    }
+
+    .info-card {
+        padding: 20px;
+    }
+}
