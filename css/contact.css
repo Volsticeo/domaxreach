@@ -1,0 +1,454 @@
+/* contact.css - Contact Section Styles */
+
+.contact-section {
+    padding: var(--section-padding);
+    position: relative;
+}
+
+/* Override global glass-card for contact section - Toned Down */
+.contact-section .glass-card {
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.18),
+        rgba(0, 28, 76, 0.12),
+        rgba(247, 213, 79, 0.08)
+    );
+    border: 1px solid rgba(235, 235, 223, 0.15);
+    box-shadow:
+        0 8px 32px 0 rgba(0, 28, 76, 0.2),
+        0 0 20px rgba(235, 235, 223, 0.08),
+        0 0 10px rgba(0, 28, 76, 0.12),
+        inset 0 1px 0 rgba(235, 235, 223, 0.2),
+        inset 0 -1px 0 rgba(0, 28, 76, 0.08);
+}
+
+.contact-section .glass-card::before {
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.08),
+        rgba(247, 213, 79, 0.05),
+        rgba(0, 28, 76, 0.04)
+    );
+}
+
+.contact-section .glass-card::after {
+    background: radial-gradient(circle at 30% 30%,
+        rgba(235, 235, 223, 0.12),
+        transparent 70%
+    );
+    opacity: 0.3;
+}
+
+.contact-section .glass-card:hover {
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.20),
+        rgba(0, 28, 76, 0.13),
+        rgba(247, 213, 79, 0.08)
+    );
+    box-shadow:
+        0 12px 40px 0 rgba(0, 28, 76, 0.18),
+        0 0 18px rgba(235, 235, 223, 0.08),
+        0 0 12px rgba(0, 28, 76, 0.12),
+        0 0 8px rgba(247, 213, 79, 0.08),
+        inset 0 1px 0 rgba(235, 235, 223, 0.22),
+        inset 0 -1px 0 rgba(0, 28, 76, 0.10);
+}
+
+/* Symmetrical Grid Layout */
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+    margin-top: 60px;
+}
+
+/* Contact Info Cards - Top Row */
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.info-card {
+    padding: 30px;
+    text-align: center;
+    transition: var(--transition-smooth);
+    /* More subtle background than global cards */
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.12),
+        rgba(0, 28, 76, 0.08),
+        rgba(247, 213, 79, 0.05)
+    );
+    border: 1px solid rgba(235, 235, 223, 0.12);
+    box-shadow:
+        0 6px 25px 0 rgba(0, 28, 76, 0.15),
+        0 0 15px rgba(235, 235, 223, 0.06),
+        inset 0 1px 0 rgba(235, 235, 223, 0.15);
+}
+
+.info-card:hover {
+    transform: translateY(-3px); /* Reduced from -5px */
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.14),
+        rgba(0, 28, 76, 0.09),
+        rgba(247, 213, 79, 0.06)
+    );
+    box-shadow:
+        0 8px 25px 0 rgba(0, 28, 76, 0.15),
+        0 0 12px rgba(235, 235, 223, 0.06),
+        0 0 8px rgba(247, 213, 79, 0.10),
+        inset 0 1px 0 rgba(235, 235, 223, 0.18);
+}
+
+.info-card i {
+    font-size: 30px;
+    color: var(--mustard);
+    margin-bottom: 15px;
+    text-shadow: 0 0 12px rgba(247, 213, 79, 0.4);
+}
+
+.info-card h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--alabaster);
+    text-shadow: 0 0 10px rgba(235, 235, 223, 0.2);
+}
+
+.info-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.8;
+    text-shadow: 0 0 8px rgba(235, 235, 223, 0.15);
+}
+
+/* Contact Form - More Subtle Styling */
+.contact-form-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.contact-form {
+    padding: 40px;
+    /* Toned down form background */
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.15),
+        rgba(0, 28, 76, 0.10),
+        rgba(247, 213, 79, 0.06)
+    );
+    border: 1px solid rgba(235, 235, 223, 0.12);
+    box-shadow:
+        0 8px 30px 0 rgba(0, 28, 76, 0.18),
+        0 0 18px rgba(235, 235, 223, 0.08),
+        inset 0 1px 0 rgba(235, 235, 223, 0.18);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 15px 20px;
+    padding-left: 45px;
+    /* More subtle input backgrounds */
+    background: rgba(235, 235, 223, 0.05);
+    border: 1px solid rgba(235, 235, 223, 0.15);
+    border-radius: 15px;
+    color: var(--alabaster);
+    font-size: 16px;
+    transition: var(--transition-smooth);
+    font-family: var(--font-primary);
+    box-shadow: inset 0 2px 8px rgba(0, 28, 76, 0.1);
+}
+
+/* Fix for select placeholder */
+.form-group select {
+    color: var(--alabaster);
+}
+
+.form-group select option[value=""] {
+    color: rgba(235, 235, 223, 0.5);
+}
+
+.form-group select:invalid {
+    color: rgba(235, 235, 223, 0.5);
+}
+
+.form-group select:valid {
+    color: var(--alabaster);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: rgba(247, 213, 79, 0.6); /* Reduced from full mustard */
+    background: rgba(247, 213, 79, 0.06); /* Reduced from 0.08 */
+    box-shadow:
+        0 0 10px rgba(247, 213, 79, 0.15), /* Reduced from 0.2 */
+        inset 0 2px 8px rgba(0, 28, 76, 0.06); /* Reduced from 0.08 */
+}
+
+.form-group label {
+    position: absolute;
+    left: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(235, 235, 223, 0.5);
+    font-size: 16px;
+    pointer-events: none;
+    transition: var(--transition-smooth);
+    background: transparent;
+}
+
+/* Special handling for select label */
+.form-group select ~ label {
+    display: none; /* Hide label for select since it has options */
+}
+
+.form-group textarea ~ label {
+    top: 20px;
+    transform: translateY(0);
+}
+
+.form-group input:focus ~ label,
+.form-group input:not(:placeholder-shown) ~ label,
+.form-group textarea:focus ~ label,
+.form-group textarea:not(:placeholder-shown) ~ label {
+    top: -10px;
+    left: 20px;
+    font-size: 12px;
+    color: var(--mustard);
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.9),
+        rgba(0, 28, 76, 0.8)
+    );
+    padding: 0 10px;
+    border-radius: 4px;
+    text-shadow: 0 0 8px rgba(247, 213, 79, 0.4);
+}
+
+.form-group i {
+    position: absolute;
+    left: 15px;
+    top: 18px;
+    color: rgba(235, 235, 223, 0.3);
+    transition: var(--transition-smooth);
+}
+
+.form-group textarea ~ i {
+    top: 20px;
+}
+
+.form-group input:focus ~ i,
+.form-group select:focus ~ i,
+.form-group textarea:focus ~ i {
+    color: var(--mustard);
+    text-shadow: 0 0 6px rgba(247, 213, 79, 0.4); /* Reduced from 0.5 */
+}
+
+.form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23EBEBDF'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+}
+
+.form-group select option {
+    background: var(--black);
+    color: var(--alabaster);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 18px 40px;
+    font-size: 16px;
+    margin-top: 20px;
+    /* More subtle button styling */
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.12),
+        rgba(0, 28, 76, 0.08),
+        rgba(247, 213, 79, 0.10)
+    );
+    border: 2px solid rgba(247, 213, 79, 0.6);
+    color: var(--mustard);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    text-shadow: 0 0 12px rgba(247, 213, 79, 0.4);
+    box-shadow:
+        0 0 20px rgba(235, 235, 223, 0.08),
+        0 0 12px rgba(247, 213, 79, 0.15);
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.16),
+        rgba(0, 28, 76, 0.10),
+        rgba(247, 213, 79, 0.12)
+    );
+    border-color: rgba(247, 213, 79, 0.8); /* Reduced from full mustard */
+    transform: translateY(-1px); /* Reduced from -2px */
+    box-shadow:
+        0 0 18px rgba(235, 235, 223, 0.08), /* Reduced from 0.12 */
+        0 0 12px rgba(247, 213, 79, 0.18), /* Reduced from 0.25 */
+        0 4px 15px rgba(0, 28, 76, 0.12); /* Reduced from 0.15 */
+    text-shadow: 0 0 12px rgba(247, 213, 79, 0.5); /* Reduced from 0.6 */
+}
+
+/* Social Links - More Subtle */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.social-link {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.08),
+        rgba(0, 28, 76, 0.06),
+        rgba(247, 213, 79, 0.04)
+    );
+    border: 1px solid rgba(235, 235, 223, 0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--alabaster);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 15px rgba(0, 28, 76, 0.1);
+}
+
+.social-link:hover {
+    background: linear-gradient(135deg,
+        rgba(235, 235, 223, 0.12),
+        rgba(0, 28, 76, 0.08),
+        rgba(247, 213, 79, 0.08)
+    );
+    border-color: rgba(247, 213, 79, 0.3); /* Reduced from 0.4 */
+    transform: translateY(-3px); /* Reduced from -5px */
+    box-shadow:
+        0 6px 20px rgba(0, 28, 76, 0.12), /* Reduced from 0.15 */
+        0 0 10px rgba(247, 213, 79, 0.15); /* Reduced from 0.2 */
+}
+
+.social-link:hover i {
+    color: var(--mustard);
+    text-shadow: 0 0 8px rgba(247, 213, 79, 0.4); /* Reduced from 0.5 */
+}
+
+/* Form Validation Styles */
+.form-group input:invalid:not(:focus):not(:placeholder-shown),
+.form-group select:invalid:not(:focus):not(:placeholder-shown),
+.form-group textarea:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: #ff6b6b;
+    box-shadow:
+        0 0 12px rgba(255, 107, 107, 0.3),
+        inset 0 2px 8px rgba(255, 107, 107, 0.1);
+}
+
+.form-group input:valid:not(:focus):not(:placeholder-shown),
+.form-group select:valid:not(:focus):not(:placeholder-shown),
+.form-group textarea:valid:not(:focus):not(:placeholder-shown) {
+    border-color: #51cf66;
+    box-shadow:
+        0 0 12px rgba(81, 207, 102, 0.3),
+        inset 0 2px 8px rgba(81, 207, 102, 0.1);
+}
+
+/* Success/Error Messages */
+.form-message {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    animation: slideInUp 0.3s ease;
+}
+
+.form-message.success {
+    background: rgba(81, 207, 102, 0.1);
+    border: 1px solid #51cf66;
+    color: #51cf66;
+    box-shadow: 0 0 15px rgba(81, 207, 102, 0.2);
+}
+
+.form-message.error {
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .contact-info {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    /* Slightly brighter on mobile for readability */
+    .contact-section .glass-card {
+        background: linear-gradient(135deg,
+            rgba(235, 235, 223, 0.20),
+            rgba(0, 28, 76, 0.14),
+            rgba(247, 213, 79, 0.10)
+        );
+    }
+
+    .info-card {
+        background: linear-gradient(135deg,
+            rgba(235, 235, 223, 0.15),
+            rgba(0, 28, 76, 0.10),
+            rgba(247, 213, 79, 0.08)
+        );
+    }
+}
+
+@media (max-width: 640px) {
+    .contact-form {
+        padding: 30px 20px;
+    }
+
+    .info-card {
+        padding: 20px;
+    }
+}

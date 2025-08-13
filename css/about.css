@@ -1,0 +1,262 @@
+/* about.css - About Section Styles */
+
+.about-section {
+    padding: var(--section-padding);
+    position: relative;
+}
+
+.about-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+/* About Content */
+.about-content {
+    z-index: 2;
+}
+
+.about-content .section-header {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.about-description {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+/* About Stats */
+.about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-box {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: var(--transition-smooth);
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, rgba(247, 213, 79, 0.1), rgba(247, 213, 79, 0.05));
+}
+
+.stat-box i {
+    font-size: 24px;
+    color: var(--mustard);
+}
+
+.stat-box div {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--alabaster);
+    font-family: var(--font-display);
+}
+
+.stat-label {
+    font-size: 12px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* About Values */
+.about-values h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: var(--mustard);
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.value-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    transition: var(--transition-smooth);
+    cursor: pointer;
+}
+
+.value-item:hover {
+    transform: translateY(-5px);
+    background: rgba(247, 213, 79, 0.1);
+    border-color: var(--mustard);
+}
+
+.value-item i {
+    font-size: 24px;
+    color: var(--mustard);
+    transition: transform 0.3s ease;
+}
+
+.value-item:hover i {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.value-item span {
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* About Visual */
+.about-visual {
+    position: relative;
+}
+
+.team-showcase {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    height: 500px;
+}
+
+.team-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    background: linear-gradient(135deg, var(--penn-blue), var(--mustard));
+}
+
+.team-showcase:hover .team-image {
+    transform: scale(1.05);
+}
+
+.team-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.team-showcase:hover .team-overlay {
+    opacity: 1;
+}
+
+.play-btn {
+    width: 70px;
+    height: 70px;
+    background: var(--mustard);
+    border: none;
+    border-radius: 50%;
+    color: var(--black);
+    font-size: 24px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.play-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 40px rgba(247, 213, 79, 0.5);
+}
+
+.team-overlay span {
+    color: var(--alabaster);
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Experience Badge - Subtle, no animation */
+.experience-badge {
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    padding: 25px;
+    background: linear-gradient(135deg, rgba(247, 213, 79, 0.08), rgba(247, 213, 79, 0.03));
+    border: 1px solid rgba(247, 213, 79, 0.3);
+    border-radius: 20px;
+    text-align: center;
+    /* Removed animation */
+}
+
+.experience-badge .years {
+    display: block;
+    font-size: 36px; /* Reduced from 48px */
+    font-weight: 600; /* Reduced from 700 */
+    color: var(--mustard);
+    font-family: var(--font-display);
+    margin-bottom: 5px;
+    opacity: 0.9; /* Added opacity for subtlety */
+}
+
+.experience-badge .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .about-wrapper {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .about-content .section-header {
+        text-align: center;
+    }
+
+    .about-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .experience-badge {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 640px) {
+    .about-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .team-showcase {
+        height: 300px;
+    }
+}
