@@ -1,39 +1,155 @@
-// interactive-elements.js - Fixed GSAP Interactive Elements with Stable Cursor
-// Note: Make sure GSAP CDN is loaded before this script
+// subtle-background-textures.js - Updated with perfectly symmetrical diagonal lines
+// Diagonal lines with perfect center-aligned symmetry and increased coverage
 
-class InteractiveElements {
+class SubtleBackgroundTextures {
     constructor() {
-        this.particles = [];
-        this.lines = [];
-        this.maxParticles = window.innerWidth > 768 ? 18 : 10;
+        this.elements = [];
+        this.currentSection = 'hero';
         this.isScrolling = false;
+        this.scrollTimeout = null;
+        this.animationRefs = new Set();
         this.mouseX = window.innerWidth / 2;
         this.mouseY = window.innerHeight / 2;
-        this.currentHoverState = 'default'; // Track current state
+        this.currentHoverState = 'default';
+
+        // Updated configurations with more diagonal lines for symmetrical coverage
+        this.sectionConfigs = {
+            'hero': {
+                elements: [
+                    { type: 'dots', count: 35, size: [2, 4], colors: ['#F7D54F', '#EBEBDF'] },
+                    { type: 'diagonal-lines', count: 20, size: [120, 220], colors: ['#F7D54F', '#EBEBDF'] }
+                ]
+            },
+            'about': {
+                elements: [
+                    { type: 'circles', count: 18, size: [3, 6], colors: ['#001C4C', '#EBEBDF'] },
+                    { type: 'triangles', count: 10, size: [4, 8], colors: ['#F7D54F'] },
+                    { type: 'diagonal-lines', count: 16, size: [100, 180], colors: ['#001C4C'] }
+                ]
+            },
+            'services': {
+                elements: [
+                    { type: 'squares', count: 16, size: [2, 5], colors: ['#001C4C', '#EBEBDF'] },
+                    { type: 'diagonal-lines', count: 24, size: [110, 200], colors: ['#F7D54F', '#EBEBDF'] }
+                ]
+            },
+            'portfolio': {
+                elements: [
+                    { type: 'sparkles', count: 28, size: [1, 3], colors: ['#F7D54F', '#EBEBDF'] },
+                    { type: 'dots', count: 16, size: [2, 4], colors: ['#001C4C'] },
+                    { type: 'diagonal-lines', count: 28, size: [80, 140], colors: ['#F7D54F'] }
+                ]
+            },
+            'contact': {
+                elements: [
+                    { type: 'circles', count: 14, size: [3, 6], colors: ['#EBEBDF', '#F7D54F'] },
+                    { type: 'dots', count: 18, size: [1, 3], colors: ['#001C4C'] },
+                    { type: 'diagonal-lines', count: 18, size: [100, 180], colors: ['#EBEBDF'] }
+                ]
+            }
+        };
 
         this.init();
     }
 
     init() {
         this.createCanvas();
-        this.createSleekCursor();
-        this.createParticles();
-        this.initEventListeners();
-        this.startAnimationLoop();
+        this.addStyles();
+        this.createSleekCursor(); // Restore original cursor
+        this.setupSectionObserver();
+        this.generateCurrentSectionTextures();
+        this.initEventListeners(); // Restore cursor events
+        this.initScrollOptimization();
     }
 
     createCanvas() {
-        // Create interactive canvas container
         this.canvas = document.createElement('div');
-        this.canvas.className = 'interactive-canvas';
+        this.canvas.className = 'subtle-background-canvas';
+        this.canvas.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+            will-change: opacity;
+        `;
         document.body.appendChild(this.canvas);
     }
 
+    addStyles() {
+        const styles = `
+            <style id="subtle-background-styles">
+                .subtle-element {
+                    position: absolute;
+                    pointer-events: none;
+                    will-change: transform, opacity;
+                }
+
+                .dot {
+                    border-radius: 50%;
+                    opacity: 0.3;
+                }
+
+                .diagonal-line {
+                    height: 1px;
+                    transform-origin: left center;
+                    opacity: 0.25;
+                    background: linear-gradient(90deg,
+                        transparent,
+                        currentColor,
+                        currentColor,
+                        transparent
+                    );
+                }
+
+                .sparkle {
+                    border-radius: 50%;
+                    opacity: 0.4;
+                    filter: blur(0.5px);
+                }
+
+                .triangle {
+                    width: 0;
+                    height: 0;
+                    opacity: 0.3;
+                }
+
+                .circle {
+                    border-radius: 50%;
+                    border: 1px solid;
+                    opacity: 0.25;
+                }
+
+                .square {
+                    opacity: 0.3;
+                    transform: rotate(45deg);
+                }
+
+                @media (max-width: 768px) {
+                    .subtle-element {
+                        opacity: 0.2 !important;
+                    }
+                    
+                    .diagonal-line {
+                        opacity: 0.15 !important;
+                    }
+                }
+            </style>
+        `;
+
+        if (!document.getElementById('subtle-background-styles')) {
+            document.head.insertAdjacentHTML('beforeend', styles);
+        }
+    }
+
+    // ===== ORIGINAL CURSOR FUNCTIONALITY RESTORED =====
     createSleekCursor() {
         // Only create custom cursor on desktop
         if (window.innerWidth <= 768) return;
 
-        // Main sleek cursor
         this.cursor = document.createElement('div');
         this.cursor.className = 'cursor';
         document.body.appendChild(this.cursor);
@@ -127,137 +243,6 @@ class InteractiveElements {
         });
     }
 
-    createParticle() {
-        const particle = document.createElement('div');
-        const types = ['', 'blue', 'white'];
-        const randomType = types[Math.floor(Math.random() * types.length)];
-
-        particle.className = `particle ${randomType}`;
-
-        // Random initial position
-        const x = Math.random() * window.innerWidth;
-        const y = Math.random() * window.innerHeight;
-
-        particle.style.left = x + 'px';
-        particle.style.top = y + 'px';
-
-        this.canvas.appendChild(particle);
-
-        const particleData = {
-            element: particle,
-            x: x,
-            y: y,
-            vx: (Math.random() - 0.5) * 0.8,
-            vy: (Math.random() - 0.5) * 0.8,
-            life: Math.random() * 400 + 300
-        };
-
-        this.particles.push(particleData);
-
-        // Animate particle with GSAP
-        this.animateParticle(particleData);
-    }
-
-    animateParticle(particle) {
-        // Floating animation with more movement
-        gsap.to(particle.element, {
-            x: particle.x + (Math.random() - 0.5) * 300,
-            y: particle.y + (Math.random() - 0.5) * 300,
-            duration: Math.random() * 12 + 8,
-            ease: "none",
-            repeat: -1,
-            yoyo: true,
-            onUpdate: () => {
-                // Update particle position for line connections
-                const rect = particle.element.getBoundingClientRect();
-                particle.x = rect.left + window.scrollX;
-                particle.y = rect.top + window.scrollY;
-            }
-        });
-
-        // Enhanced opacity pulse with higher values
-        gsap.to(particle.element, {
-            opacity: Math.random() * 0.5 + 0.4,
-            duration: Math.random() * 4 + 2,
-            ease: "power2.inOut",
-            repeat: -1,
-            yoyo: true
-        });
-
-        // Add subtle scale animation for more life
-        gsap.to(particle.element, {
-            scale: Math.random() * 0.5 + 0.8,
-            duration: Math.random() * 6 + 4,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true
-        });
-    }
-
-    createConnectionLine(particle1, particle2) {
-        const line = document.createElement('div');
-        line.className = Math.random() > 0.6 ? 'connection-line blue' : 'connection-line';
-
-        this.canvas.appendChild(line);
-
-        const distance = this.getDistance(particle1, particle2);
-        const angle = Math.atan2(particle2.y - particle1.y, particle2.x - particle1.x);
-
-        // Position and style the line
-        line.style.left = particle1.x + 'px';
-        line.style.top = particle1.y + 'px';
-        line.style.width = distance + 'px';
-        line.style.transform = `rotate(${angle}rad)`;
-        line.style.transformOrigin = '0 0';
-
-        // Enhanced line appearance animation
-        gsap.fromTo(line,
-            { opacity: 0, scaleX: 0 },
-            {
-                opacity: 0.9,
-                scaleX: 1,
-                duration: 0.8,
-                ease: "power2.out"
-            }
-        );
-
-        // Auto remove after longer time
-        setTimeout(() => {
-            if (line.parentNode) {
-                gsap.to(line, {
-                    opacity: 0,
-                    duration: 0.5,
-                    onComplete: () => {
-                        if (line.parentNode) {
-                            line.parentNode.removeChild(line);
-                        }
-                    }
-                });
-            }
-        }, 3500);
-    }
-
-    getDistance(p1, p2) {
-        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-    }
-
-    checkConnections() {
-        // Throttle connection checking to prevent performance issues
-        if (this.isScrolling) return;
-
-        const connectionDistance = 180;
-
-        for (let i = 0; i < this.particles.length; i++) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-                const distance = this.getDistance(this.particles[i], this.particles[j]);
-
-                if (distance < connectionDistance && Math.random() > 0.96) {
-                    this.createConnectionLine(this.particles[i], this.particles[j]);
-                }
-            }
-        }
-    }
-
     initEventListeners() {
         // Scroll optimization
         let scrollTimeout;
@@ -268,11 +253,6 @@ class InteractiveElements {
                 this.isScrolling = false;
             }, 150);
         });
-
-        // Mouse interaction with particles
-        if (window.innerWidth > 768) {
-            document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        }
 
         // Resize handler
         window.addEventListener('resize', () => this.handleResize());
@@ -287,70 +267,20 @@ class InteractiveElements {
         });
     }
 
-    handleMouseMove(e) {
-        // Only run on desktop and not while scrolling
-        if (window.innerWidth <= 768 || this.isScrolling) return;
-
-        const mouseX = e.clientX + window.scrollX;
-        const mouseY = e.clientY + window.scrollY;
-
-        // Enhanced particle attraction to mouse
-        this.particles.forEach(particle => {
-            const distance = this.getDistance({ x: mouseX, y: mouseY }, particle);
-
-            if (distance < 120) {
-                const force = (120 - distance) / 120 * 0.03;
-                const angle = Math.atan2(mouseY - particle.y, mouseX - particle.x);
-
-                gsap.to(particle.element, {
-                    x: `+=${Math.cos(angle) * force}`,
-                    y: `+=${Math.sin(angle) * force}`,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-
-                // Brighten particles near cursor
-                gsap.to(particle.element, {
-                    opacity: 1,
-                    scale: 1.2,
-                    duration: 0.2,
-                    ease: "power2.out",
-                    yoyo: true,
-                    repeat: 1
-                });
-            }
-        });
-    }
-
     handleResize() {
-        // Adjust particle count based on screen size
-        const newMaxParticles = window.innerWidth > 768 ? 18 : 10;
-
-        if (newMaxParticles < this.particles.length) {
-            // Remove excess particles
-            const excess = this.particles.length - newMaxParticles;
-            for (let i = 0; i < excess; i++) {
-                const particle = this.particles.pop();
-                if (particle && particle.element.parentNode) {
-                    particle.element.parentNode.removeChild(particle.element);
-                }
-            }
-        } else if (newMaxParticles > this.particles.length) {
-            // Add more particles
-            const needed = newMaxParticles - this.particles.length;
-            for (let i = 0; i < needed; i++) {
-                this.createParticle();
-            }
-        }
-
-        this.maxParticles = newMaxParticles;
-
         // Recreate cursor for mobile/desktop changes
         if (window.innerWidth <= 768) {
             this.removeCursor();
         } else if (!this.cursor) {
             this.createSleekCursor();
         }
+
+        // Regenerate textures for new screen size
+        if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+            this.clearCanvas();
+            this.generateCurrentSectionTextures();
+        }, 300);
     }
 
     removeCursor() {
@@ -360,203 +290,399 @@ class InteractiveElements {
         }
     }
 
-    startAnimationLoop() {
-        let lastTime = 0;
-        const fps = 60;
-        const interval = 1000 / fps;
-
-        const animate = (currentTime) => {
-            if (currentTime - lastTime >= interval) {
-                this.update();
-                lastTime = currentTime;
-            }
-
-            if (!document.hidden) {
-                requestAnimationFrame(animate);
-            }
-        };
-
-        requestAnimationFrame(animate);
-    }
-
-    update() {
-        // Check connections more frequently for more lines
-        if (Math.random() > 0.92 && !this.isScrolling) {
-            this.checkConnections();
-        }
-
-        // Clean up old particles and create new ones
-        this.particles.forEach((particle, index) => {
-            particle.life--;
-
-            if (particle.life <= 0) {
-                // Fade out and remove
-                gsap.to(particle.element, {
-                    opacity: 0,
-                    scale: 0,
-                    duration: 1.2,
-                    onComplete: () => {
-                        if (particle.element.parentNode) {
-                            particle.element.parentNode.removeChild(particle.element);
-                        }
-                    }
-                });
-
-                this.particles.splice(index, 1);
-
-                // Create a new particle to maintain count
-                setTimeout(() => {
-                    if (this.particles.length < this.maxParticles) {
-                        this.createParticle();
-                    }
-                }, Math.random() * 1500 + 800);
-            }
-        });
-    }
-
     pauseAnimations() {
-        // Pause all GSAP animations
-        gsap.globalTimeline.pause();
+        this.animationRefs.forEach(tween => tween.pause());
     }
 
     resumeAnimations() {
-        // Resume all GSAP animations
-        gsap.globalTimeline.play();
+        this.animationRefs.forEach(tween => tween.play());
     }
+    // ===== END ORIGINAL CURSOR FUNCTIONALITY =====
 
-    // Enhanced scroll-triggered particle burst effect
-    createScrollBurst(x, y) {
-        if (this.isScrolling || window.innerWidth <= 768) return;
-
-        const burstCount = 8;
-
-        for (let i = 0; i < burstCount; i++) {
-            const burstParticle = document.createElement('div');
-            burstParticle.className = 'particle';
-            burstParticle.style.left = x + 'px';
-            burstParticle.style.top = y + 'px';
-            burstParticle.style.opacity = '1';
-            burstParticle.style.transform = 'scale(1.5)';
-
-            this.canvas.appendChild(burstParticle);
-
-            // Enhanced burst animation
-            const angle = (i / burstCount) * Math.PI * 2;
-            const distance = Math.random() * 80 + 40;
-
-            gsap.to(burstParticle, {
-                x: Math.cos(angle) * distance,
-                y: Math.sin(angle) * distance,
-                opacity: 0,
-                scale: 0,
-                rotation: Math.random() * 360,
-                duration: 1.2,
-                ease: "power2.out",
-                onComplete: () => {
-                    if (burstParticle.parentNode) {
-                        burstParticle.parentNode.removeChild(burstParticle);
+    setupSectionObserver() {
+        this.sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    const sectionId = this.getSectionId(entry.target);
+                    if (sectionId && sectionId !== this.currentSection) {
+                        this.transitionToSection(sectionId);
                     }
                 }
             });
+        }, {
+            threshold: [0.3, 0.5, 0.7],
+            rootMargin: '0px 0px 0px 0px'
+        });
+
+        // Observe sections
+        const sections = document.querySelectorAll('section, .section, [data-section], #hero, #about, #services, #portfolio, #contact');
+        sections.forEach(section => {
+            this.sectionObserver.observe(section);
+        });
+    }
+
+    getSectionId(element) {
+        if (element.id) return element.id;
+        if (element.dataset.section) return element.dataset.section;
+
+        const classList = element.className.toLowerCase();
+        if (classList.includes('hero')) return 'hero';
+        if (classList.includes('about')) return 'about';
+        if (classList.includes('services') || classList.includes('service')) return 'services';
+        if (classList.includes('portfolio') || classList.includes('work') || classList.includes('projects')) return 'portfolio';
+        if (classList.includes('contact')) return 'contact';
+
+        // Position-based fallback
+        const rect = element.getBoundingClientRect();
+        const scrollY = window.scrollY;
+        const totalPos = rect.top + scrollY;
+
+        if (totalPos < window.innerHeight * 0.8) return 'hero';
+        if (totalPos < window.innerHeight * 1.8) return 'about';
+        if (totalPos < window.innerHeight * 2.8) return 'services';
+        if (totalPos < window.innerHeight * 3.8) return 'portfolio';
+
+        return 'contact';
+    }
+
+    transitionToSection(sectionId) {
+        if (!this.sectionConfigs[sectionId] || this.isScrolling) return;
+
+        this.currentSection = sectionId;
+
+        // Very gentle fade transition
+        this.animationRefs.forEach(tween => tween.kill());
+        this.animationRefs.clear();
+
+        gsap.to(this.canvas.children, {
+            opacity: 0,
+            duration: 1,
+            stagger: 0.05,
+            ease: "power2.out",
+            onComplete: () => {
+                this.clearCanvas();
+                this.generateCurrentSectionTextures();
+            }
+        });
+    }
+
+    generateCurrentSectionTextures() {
+        const config = this.sectionConfigs[this.currentSection];
+        if (!config) return;
+
+        // Mobile optimization - reduce counts significantly
+        const isMobile = window.innerWidth <= 768;
+        const reductionFactor = isMobile ? 0.4 : 1;
+
+        config.elements.forEach((elementConfig, index) => {
+            if (elementConfig.type === 'diagonal-lines') {
+                // Handle diagonal lines separately for perfect symmetrical positioning
+                this.createSymmetricalDiagonalLines(elementConfig, reductionFactor);
+            } else {
+                const count = Math.floor(elementConfig.count * reductionFactor);
+                // Create immediately with no delay for other elements too
+                for (let i = 0; i < count; i++) {
+                    this.createElement(elementConfig, i);
+                }
+            }
+        });
+    }
+
+    createSymmetricalDiagonalLines(config, reductionFactor) {
+        const count = Math.floor(config.count * reductionFactor);
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+
+        // Create grid-based scattered positioning across the entire screen
+        const cols = Math.ceil(Math.sqrt(count / 2)) * 2; // Ensure even distribution
+        const rows = Math.ceil(count / cols);
+        const cellWidth = screenWidth / cols;
+        const cellHeight = screenHeight / rows;
+
+        for (let i = 0; i < count; i++) {
+            // Create immediately with no delay
+            const element = document.createElement('div');
+            element.className = 'subtle-element diagonal-line';
+
+            const size = config.size[0] + Math.random() * (config.size[1] - config.size[0]);
+            const color = config.colors[Math.floor(Math.random() * config.colors.length)];
+
+            // Scatter lines across the screen in a grid pattern with randomness
+            const col = i % cols;
+            const row = Math.floor(i / cols);
+
+            // Base position in grid cell
+            const baseX = col * cellWidth;
+            const baseY = row * cellHeight;
+
+            // Add randomness within the cell for natural scatter
+            const x = baseX + (Math.random() * cellWidth * 0.8) + (cellWidth * 0.1);
+            const y = baseY + (Math.random() * cellHeight * 0.8) + (cellHeight * 0.1);
+
+            // Alternate between \ and / diagonals
+            const rotation = (i % 2 === 0) ? 45 : -45;
+
+            this.styleDiagonalLine(element, size, color, x, y, rotation);
+            this.canvas.appendChild(element);
+            this.animateDiagonalLine(element, i);
+
+            this.elements.push(element);
         }
     }
 
-    // Add method to create subtle particle effects when moving over cards
-    createCardEffect(x, y) {
-        if (window.innerWidth <= 768) return;
+    styleDiagonalLine(element, size, color, x, y, rotation) {
+        element.style.left = x + 'px';
+        element.style.top = y + 'px';
+        element.style.width = size + 'px';
+        element.style.color = color;
+        element.style.transform = `rotate(${rotation}deg)`;
+        element.style.opacity = '0';
+    }
 
-        const effectParticle = document.createElement('div');
-        effectParticle.className = 'particle blue';
-        effectParticle.style.left = x + 'px';
-        effectParticle.style.top = y + 'px';
-        effectParticle.style.opacity = '0.6';
-        effectParticle.style.transform = 'scale(0.8)';
+    animateDiagonalLine(element, index) {
+        // Instant entrance - no delay
+        const entranceTween = gsap.fromTo(element,
+            {
+                opacity: 0,
+                scaleX: 0
+            },
+            {
+                opacity: 0.25,
+                scaleX: 1,
+                duration: 0.5, // Much faster
+                delay: 0, // No delay
+                ease: "power2.out"
+            }
+        );
+        this.animationRefs.add(entranceTween);
 
-        this.canvas.appendChild(effectParticle);
+        // Very gentle floating movement
+        const floatTween = gsap.to(element, {
+            x: `+=${(Math.random() - 0.5) * 30}`,
+            y: `+=${(Math.random() - 0.5) * 30}`,
+            duration: 25 + Math.random() * 10,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+        this.animationRefs.add(floatTween);
 
-        // Animate effect particle
-        gsap.to(effectParticle, {
-            x: (Math.random() - 0.5) * 20,
-            y: (Math.random() - 0.5) * 20,
-            opacity: 0,
-            scale: 0.3,
-            duration: 0.8,
-            ease: "power2.out",
-            onComplete: () => {
-                if (effectParticle.parentNode) {
-                    effectParticle.parentNode.removeChild(effectParticle);
-                }
+        // Subtle opacity pulsing
+        const pulseTween = gsap.to(element, {
+            opacity: 0.4,
+            duration: 10 + Math.random() * 5,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+        this.animationRefs.add(pulseTween);
+    }
+
+    createElement(config, index) {
+        const element = document.createElement('div');
+        element.className = `subtle-element ${config.type.slice(0, -1)}`;
+
+        // Smaller sizes
+        const size = config.size[0] + Math.random() * (config.size[1] - config.size[0]);
+
+        // Random color
+        const color = config.colors[Math.floor(Math.random() * config.colors.length)];
+
+        // More spread out positioning - avoid center clustering
+        const margin = 100;
+        const x = margin + Math.random() * (window.innerWidth - margin * 2);
+        const y = margin + Math.random() * (window.innerHeight - margin * 2);
+
+        this.styleElement(element, config.type.slice(0, -1), size, color, x, y);
+        this.canvas.appendChild(element);
+        this.animateElement(element, config.type.slice(0, -1), index);
+
+        this.elements.push(element);
+    }
+
+    styleElement(element, type, size, color, x, y) {
+        element.style.left = x + 'px';
+        element.style.top = y + 'px';
+        element.style.opacity = '0';
+
+        switch (type) {
+            case 'dot':
+            case 'sparkle':
+                element.style.width = size + 'px';
+                element.style.height = size + 'px';
+                element.style.background = color;
+                break;
+
+            case 'triangle':
+                element.style.borderLeft = `${size/2}px solid transparent`;
+                element.style.borderRight = `${size/2}px solid transparent`;
+                element.style.borderBottom = `${size}px solid ${color}`;
+                break;
+
+            case 'circle':
+                element.style.width = size + 'px';
+                element.style.height = size + 'px';
+                element.style.borderColor = color;
+                break;
+
+            case 'square':
+                element.style.width = size + 'px';
+                element.style.height = size + 'px';
+                element.style.background = color;
+                break;
+        }
+    }
+
+    animateElement(element, type, index) {
+        // Instant entrance for all elements
+        const entranceTween = gsap.fromTo(element,
+            {
+                opacity: 0,
+                scale: 0
+            },
+            {
+                opacity: this.getOpacityForType(type),
+                scale: 1,
+                duration: 0.5, // Much faster
+                delay: 0, // No delay
+                ease: "power2.out"
+            }
+        );
+        this.animationRefs.add(entranceTween);
+
+        // Very gentle floating
+        const floatTween = gsap.to(element, {
+            x: `+=${(Math.random() - 0.5) * 60}`,
+            y: `+=${(Math.random() - 0.5) * 60}`,
+            duration: 15 + Math.random() * 10,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+        this.animationRefs.add(floatTween);
+
+        // Subtle type-specific animation (NO ROTATION for any elements)
+        const mainTween = this.getSubtleAnimationForType(element, type);
+        if (mainTween) this.animationRefs.add(mainTween);
+    }
+
+    getOpacityForType(type) {
+        // Much lower opacities
+        const opacities = {
+            dot: 0.3, sparkle: 0.4,
+            triangle: 0.3, circle: 0.25, square: 0.3
+        };
+        return opacities[type] || 0.3;
+    }
+
+    getSubtleAnimationForType(element, type) {
+        switch (type) {
+            case 'sparkle':
+                return gsap.to(element, {
+                    opacity: 0.6,
+                    duration: 3,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+
+            case 'triangle':
+            case 'square':
+                // Scale animation instead of rotation
+                return gsap.to(element, {
+                    scale: 1.2,
+                    duration: 12,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+
+            case 'circle':
+                return gsap.to(element, {
+                    scale: 1.2,
+                    duration: 8,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+
+            default:
+                return null;
+        }
+    }
+
+    initScrollOptimization() {
+        // Much gentler scroll optimization - lightweight approach
+        window.addEventListener('scroll', () => {
+            if (!this.isScrolling) {
+                this.isScrolling = true;
+                // Use will-change for better performance
+                this.canvas.style.willChange = 'opacity';
+                gsap.to(this.canvas, { opacity: 0.7, duration: 0.2 });
+            }
+
+            clearTimeout(this.scrollTimeout);
+            this.scrollTimeout = setTimeout(() => {
+                this.isScrolling = false;
+                gsap.to(this.canvas, {
+                    opacity: 1,
+                    duration: 0.5,
+                    onComplete: () => {
+                        this.canvas.style.willChange = 'auto';
+                    }
+                });
+            }, 150);
+        }, { passive: true });
+
+        // Pause animations when tab is hidden for performance
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.animationRefs.forEach(tween => tween.pause());
+            } else {
+                this.animationRefs.forEach(tween => tween.play());
             }
         });
     }
-}
 
-// Enhanced intersection observer for scroll effects
-class ScrollInteractionEnhancer {
-    constructor(interactiveElements) {
-        this.interactiveElements = interactiveElements;
-        this.init();
+    clearCanvas() {
+        this.animationRefs.forEach(tween => tween.kill());
+        this.animationRefs.clear();
+        this.canvas.innerHTML = '';
+        this.elements = [];
     }
 
-    init() {
-        // Create intersection observer for scroll effects
-        this.observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Trigger enhanced particle burst when elements come into view
-                    const rect = entry.boundingClientRect;
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-
-                    this.interactiveElements.createScrollBurst(centerX, centerY);
-                }
-            });
-        }, {
-            threshold: 0.3,
-            rootMargin: '0px 0px -5% 0px'
-        });
-
-        // Observe key elements
-        const elementsToObserve = document.querySelectorAll('.glass-card, .section-header');
-        elementsToObserve.forEach(el => this.observer.observe(el));
-
-        // Add subtle mousemove listener for card effects
-        document.addEventListener('mousemove', (e) => {
-            const target = e.target.closest('.glass-card');
-            if (target && Math.random() > 0.95) { // Very occasional subtle effects on cards
-                this.interactiveElements.createCardEffect(e.clientX, e.clientY);
-            }
-        });
+    destroy() {
+        this.clearCanvas();
+        if (this.sectionObserver) this.sectionObserver.disconnect();
+        if (this.canvas) this.canvas.remove();
+        this.removeCursor();
     }
 }
 
-// Initialize when DOM is loaded and GSAP is available
-function initInteractiveElements() {
+// Initialize function
+function initSubtleBackgroundTextures() {
     if (typeof gsap === 'undefined') {
-        console.warn('GSAP is not loaded. Interactive elements will not work.');
+        console.warn('GSAP is not loaded. Subtle background textures will not work.');
         return;
     }
 
-    // Initialize interactive elements
-    const interactiveElements = new InteractiveElements();
+    // Initialize subtle background textures
+    const subtleBackground = new SubtleBackgroundTextures();
 
-    // Initialize scroll interaction enhancer
-    const scrollEnhancer = new ScrollInteractionEnhancer(interactiveElements);
+    // Global reference
+    window.subtleBackground = subtleBackground;
 
-    // Global reference for other scripts to access
-    window.interactiveElements = interactiveElements;
-
-    console.log('Enhanced sleek interactive elements initialized successfully');
+    console.log('✨ Subtle background textures with symmetrical diagonal lines initialized successfully!');
 }
 
-// Auto-initialize when DOM is ready
+// Auto-initialize
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initInteractiveElements);
+    document.addEventListener('DOMContentLoaded', initSubtleBackgroundTextures);
 } else {
-    initInteractiveElements();
+    initSubtleBackgroundTextures();
 }
 
-// Export for module usage if needed
+// Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { InteractiveElements, ScrollInteractionEnhancer };
+    module.exports = { SubtleBackgroundTextures };
 }
